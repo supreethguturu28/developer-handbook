@@ -421,6 +421,165 @@ await fetch('/api/users/123', {
 });
 ```
 
+### Python Requests Library
+```python
+import requests
+import json
+
+# GET request
+response = requests.get('https://api.example.com/users')
+users = response.json()
+print(f"Status: {response.status_code}")
+print(f"Users: {users}")
+
+# GET with query parameters
+response = requests.get('https://api.example.com/users', 
+                       params={'page': 1, 'limit': 10})
+users = response.json()
+
+# GET with headers
+headers = {'Authorization': 'Bearer your-token-here'}
+response = requests.get('https://api.example.com/users/123', headers=headers)
+user = response.json()
+
+# POST request
+new_user_data = {
+    'name': 'John Doe',
+    'email': 'john@example.com'
+}
+response = requests.post('https://api.example.com/users',
+                        json=new_user_data)
+created_user = response.json()
+print(f"Created user: {created_user}")
+
+# POST with custom headers
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer your-token-here'
+}
+response = requests.post('https://api.example.com/users',
+                        json=new_user_data,
+                        headers=headers)
+
+# PUT request
+updated_user_data = {
+    'id': 123,
+    'name': 'John Smith',
+    'email': 'johnsmith@example.com',
+    'age': 30
+}
+response = requests.put('https://api.example.com/users/123',
+                       json=updated_user_data)
+updated_user = response.json()
+
+# PATCH request
+patch_data = {'email': 'newemail@example.com'}
+response = requests.patch('https://api.example.com/users/123',
+                         json=patch_data)
+
+# DELETE request
+response = requests.delete('https://api.example.com/users/123')
+print(f"Delete status: {response.status_code}")
+
+# HEAD request
+response = requests.head('https://api.example.com/users/123')
+print(f"Status: {response.status_code}")
+print(f"Content-Length: {response.headers.get('content-length')}")
+print(f"Last-Modified: {response.headers.get('last-modified')}")
+
+# OPTIONS request
+response = requests.options('https://api.example.com/users')
+allowed_methods = response.headers.get('allow')
+print(f"Allowed methods: {allowed_methods}")
+
+# Error handling example
+try:
+    response = requests.get('https://api.example.com/users/999')
+    response.raise_for_status()  # Raises HTTPError for bad responses
+    user = response.json()
+except requests.exceptions.HTTPError as e:
+    print(f"HTTP Error: {e}")
+except requests.exceptions.RequestException as e:
+    print(f"Request Error: {e}")
+
+# Session example for multiple requests
+session = requests.Session()
+session.headers.update({'Authorization': 'Bearer your-token-here'})
+
+# Now all requests in this session will include the auth header
+users = session.get('https://api.example.com/users').json()
+new_user = session.post('https://api.example.com/users', 
+                       json={'name': 'Jane Doe'}).json()
+```
+
+### Python with urllib (Standard Library)
+```python
+import urllib.request
+import urllib.parse
+import json
+
+# GET request
+def get_users():
+    url = 'https://api.example.com/users'
+    req = urllib.request.Request(url)
+    
+    with urllib.request.urlopen(req) as response:
+        data = response.read()
+        users = json.loads(data.decode('utf-8'))
+        return users
+
+# POST request
+def create_user(name, email):
+    url = 'https://api.example.com/users'
+    data = {
+        'name': name,
+        'email': email
+    }
+    
+    # Convert data to JSON and encode
+    json_data = json.dumps(data).encode('utf-8')
+    
+    # Create request with headers
+    req = urllib.request.Request(url)
+    req.add_header('Content-Type', 'application/json')
+    req.add_header('Content-Length', len(json_data))
+    
+    with urllib.request.urlopen(req, json_data) as response:
+        result = response.read()
+        return json.loads(result.decode('utf-8'))
+
+# PUT request
+def update_user(user_id, user_data):
+    url = f'https://api.example.com/users/{user_id}'
+    json_data = json.dumps(user_data).encode('utf-8')
+    
+    req = urllib.request.Request(url, method='PUT')
+    req.add_header('Content-Type', 'application/json')
+    
+    with urllib.request.urlopen(req, json_data) as response:
+        result = response.read()
+        return json.loads(result.decode('utf-8'))
+
+# DELETE request
+def delete_user(user_id):
+    url = f'https://api.example.com/users/{user_id}'
+    req = urllib.request.Request(url, method='DELETE')
+    
+    with urllib.request.urlopen(req) as response:
+        return response.status
+
+# Example usage
+try:
+    users = get_users()
+    new_user = create_user('John Doe', 'john@example.com')
+    updated_user = update_user(123, {'name': 'John Smith'})
+    delete_status = delete_user(123)
+except urllib.error.HTTPError as e:
+    print(f"HTTP Error: {e.code} - {e.reason}")
+except urllib.error.URLError as e:
+    print(f"URL Error: {e.reason}")
+```
+
 ### cURL Examples
 ```bash
 # GET request
