@@ -1,10 +1,10 @@
-# Knowledge Base
+# Developer Handbook
 
 A comprehensive collection of technical guides, references, and documentation for developers and tech professionals.
 
 ## 📚 Overview
 
-This repository serves as a centralized knowledge base containing practical guides, quick references, and detailed documentation on various technical topics. Each guide is designed to be concise, practical, and easily searchable.
+This repository serves as a centralized developer handbook containing practical guides, quick references, and detailed documentation on various technical topics. Each guide is designed to be concise, practical, and easily searchable.
 
 ## 📋 Current Guides
 
@@ -23,7 +23,7 @@ This repository serves as a centralized knowledge base containing practical guid
 ## 📁 Repository Structure
 
 ```
-knowledge-base/
+developer-handbook/
 ├── README.md                    # This file
 ├── git-reference-guide.md       # Git commands and workflows
 ├── http-status-codes-guide.md   # HTTP status codes reference
@@ -46,7 +46,7 @@ knowledge-base/
 - Terminal/Shell Commands
 - API Design Best Practices
 
-## 🔍 How to Use This Knowledge Base
+## 🔍 How to Use This Developer Handbook
 
 ### Finding Information
 - **Browse by Category**: Use the table above to find guides by topic
@@ -60,7 +60,7 @@ knowledge-base/
 
 ## 🤝 Contributing
 
-This knowledge base is continuously growing. If you'd like to contribute:
+This developer handbook is continuously growing. If you'd like to contribute:
 
 1. **Suggest Topics**: Open an issue to suggest new guides or improvements
 2. **Submit Content**: Fork the repository and submit pull requests
@@ -120,4 +120,4 @@ If you have questions, suggestions, or need help with any of the guides:
 
 **Happy Learning!** 🎉
 
-*This knowledge base is designed to be a living document that grows with the community's needs.*
+*This developer handbook is designed to be a living document that grows with the community's needs.*
