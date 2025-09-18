@@ -176,7 +176,9 @@ The ASGI server transmits the HTTP response back over the network to the origina
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Simplified Block Diagram
+## High-Level Architecture Overview
+
+This simplified diagram shows the core components and data flow in the FastAPI request/response cycle:
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -194,7 +196,31 @@ The ASGI server transmits the HTTP response back over the network to the origina
 │                 │    │                 │    │                 │    │                 │
 │                 │    │                 │    │                 │    │                 │
 └─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
-
-REQUEST FLOW:  CLIENT → ASGI → FASTAPI → FUNCTION
-RESPONSE FLOW: CLIENT ← ASGI ← FASTAPI ← FUNCTION
 ```
+
+### Component Responsibilities
+
+| Component | Primary Role | Key Functions |
+|-----------|--------------|---------------|
+| **Client** | Request initiator | • Send HTTP requests<br>• Receive HTTP responses<br>• Handle user interactions |
+| **ASGI Server** | Protocol adapter | • Parse raw HTTP<br>• Manage connections<br>• Convert between HTTP and ASGI |
+| **FastAPI App** | Request processor | • Route matching<br>• Parameter validation<br>• Dependency injection |
+| **Your Function** | Business logic | • Data processing<br>• Database operations<br>• Return responses |
+
+### Data Flow Summary
+
+```
+REQUEST FLOW:  CLIENT → ASGI → FASTAPI → FUNCTION
+               HTTP     ASGI    Python    Your Code
+
+RESPONSE FLOW: CLIENT ← ASGI ← FASTAPI ← FUNCTION
+               HTTP     HTTP    JSON      Python Objects
+```
+
+### Key Characteristics
+
+- **🔄 Bidirectional**: Data flows in both directions through the same components
+- **🔀 Transformation**: Each layer transforms data format (HTTP → ASGI → Python objects)
+- **⚡ Async**: Non-blocking operations allow concurrent request handling
+- **🛡️ Validation**: Automatic type checking and data validation at FastAPI layer
+- **🎯 Separation**: Clear separation of concerns across different layers
