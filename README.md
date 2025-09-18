@@ -13,6 +13,7 @@ This repository serves as a centralized developer handbook containing practical 
 | [Git Reference Guide](git-reference-guide.md) | Comprehensive Git commands and workflows | ![Git Guide](https://img.shields.io/badge/status-active-green) |
 | [HTTP Status Codes Guide](http-status-codes-guide.md) | Complete reference for HTTP status codes | ![HTTP Guide](https://img.shields.io/badge/status-active-green) |
 | [HTTP Methods Guide](http-methods-guide.md) | Complete guide to HTTP methods and RESTful APIs | ![HTTP Methods Guide](https://img.shields.io/badge/status-active-green) |
+| [FastAPI Request/Response Cycle](fastapi-request-response-cycle.md) | Detailed breakdown of FastAPI request processing | ![FastAPI Guide](https://img.shields.io/badge/status-active-green) |
 
 ## 🚀 Quick Start
 
@@ -25,11 +26,12 @@ This repository serves as a centralized developer handbook containing practical 
 
 ```
 developer-handbook/
-├── README.md                    # This file
-├── git-reference-guide.md       # Git commands and workflows
-├── http-status-codes-guide.md   # HTTP status codes reference
-├── http-methods-guide.md        # HTTP methods and RESTful APIs
-└── [future-guides].md           # Additional guides will be added here
+├── README.md                         # This file
+├── git-reference-guide.md            # Git commands and workflows
+├── http-status-codes-guide.md        # HTTP status codes reference
+├── http-methods-guide.md             # HTTP methods and RESTful APIs
+├── fastapi-request-response-cycle.md # FastAPI request processing cycle
+└── [future-guides].md                # Additional guides will be added here
 ```
 
 ## 🎯 Guide Categories
@@ -40,6 +42,7 @@ developer-handbook/
 ### Web Development
 - HTTP Status Codes Guide
 - HTTP Methods Guide
+- FastAPI Request/Response Cycle
 
 ### Coming Soon
 - JavaScript/TypeScript Reference
