@@ -129,4 +129,4 @@ If you have questions, suggestions, or need help with any of the guides:
 *This developer handbook is designed to be a living document that grows with the community's needs.*
 
 ---
-*Last updated: September 16, 2025*
+*Last updated: September 18, 2025*
