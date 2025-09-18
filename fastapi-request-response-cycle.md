@@ -116,11 +116,11 @@ The ASGI server transmits the HTTP response back over the network to the origina
 │  │  async def read_item(item_id: int, query: str = None):                     │ │
 │  │      # Your business logic here                                            │ │
 │  │      ┌─────────────────────────────────────────────────────────────────┐   │ │
-│  │      │  - Database Operations                                          │   │ │
-│  │      │  - ML Model Inference                                           │   │ │
-│  │      │  - Data Processing                                              │   │ │
-│  │      │  - Business Logic                                               │   │ │
-│  │      │  - Analytics/Logging                                            │   │ │
+│  │      │  • Database Operations                                          │   │ │
+│  │      │  • ML Model Inference                                           │   │ │
+│  │      │  • Data Processing                                              │   │ │
+│  │      │  • Business Logic                                               │   │ │
+│  │      │  • Analytics/Logging                                            │   │ │
 │  │      └─────────────────────────────────────────────────────────────────┘   │ │
 │  │      return {"item_id": item_id, "query": query}                           │ │
 │  └────────────────────────────────────────────────────────────────────────────┘ │
