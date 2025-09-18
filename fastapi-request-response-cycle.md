@@ -180,20 +180,20 @@ The ASGI server transmits the HTTP response back over the network to the origina
 
 This simplified diagram shows the core components and data flow in the FastAPI request/response cycle:
 
+### Architecture Flow Diagram
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│     CLIENT      │───▶│   ASGI SERVER   │───▶│   FASTAPI APP   │───▶│  YOUR FUNCTION  │
-│   (Browser,     │    │   (Uvicorn)     │    │  (Routing &     │    │   (Business     │
-│    App, API)    │    │                 │    │  Validation)    │    │     Logic)      │
-│                 │    │                 │    │                 │    │                 │
+│     CLIENT      │    │   ASGI SERVER   │    │   FASTAPI APP   │    │  YOUR FUNCTION  │
+│   (Browser,     │───>│    (Uvicorn)    │───>│  (Routing &     │───>│ (Business Logic)│
+│    App, API)    │    │                 │    │  Validation)    │    │                 │
 └─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
-        ▲                       ▲                       ▲                       │
-        │                       │                       │                       │
-        │                       │                       ▼                       ▼
+        ▲                       ▲                      ▲                     │
+        │                       │                      │                     │
+        │                       │                      ▼                     ▼
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│ HTTP RESPONSE   │◀───│ HTTP CONVERSION │◀───│ RESPONSE        │◀───│ RETURN DATA     │
-│                 │    │                 │    │ GENERATION      │    │                 │
-│                 │    │                 │    │                 │    │                 │
+│                 │    │                 │    │     RESPONSE    │    │                 │
+│  HTTP RESPONSE  │<───│ HTTP CONVERSION │<───│    GENERATION   │<───│   RETURN DATA   │
 │                 │    │                 │    │                 │    │                 │
 └─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
