@@ -63,134 +63,138 @@ The ASGI server transmits the HTTP response back over the network to the origina
 ## Visual Flow Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           FastAPI Request/Response Cycle                    │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            FastAPI Request/Response Cycle                       │
+└─────────────────────────────────────────────────────────────────────────────────┘
 
 🌐 CLIENT
-│  ┌─────────────────────────────────────────────────────────────┐
-│  │  HTTP Request                                               │
-│  │  • Method: GET/POST/PUT/DELETE                             │
-│  │  • URL: http://127.0.0.1:8000/items/5?query=abc          │
-│  │  • Headers: Content-Type, Authorization, etc.             │
-│  │  • Body: JSON data (for POST/PUT)                         │
-│  └─────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔄 ASGI SERVER (Uvicorn)                                                   │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │  • Receives raw HTTP request                                           ││
-│  │  • Parses HTTP headers, method, path, body                             ││
-│  │  • Converts to ASGI scope (Python dictionary)                          ││
-│  │  • Handles connection management                                        ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  ⚡ FASTAPI APPLICATION                                                      │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │  🛣️  ROUTING                                                            ││
-│  │  • Match path: /items/{item_id} ↔ /items/5                            ││
-│  │  • Match HTTP method: GET                                              ││
-│  │  • Find corresponding function                                          ││
-│  │                                                                         ││
-│  │  📝 PARAMETER PROCESSING                                                ││
-│  │  • Path params: {item_id} → 5 (converted to int)                      ││
-│  │  • Query params: ?query=abc → query="abc"                             ││
-│  │  • Request body: JSON → Pydantic model                                 ││
-│  │  • Type validation and conversion                                       ││
-│  │                                                                         ││
-│  │  🔌 DEPENDENCY INJECTION                                                ││
-│  │  • Resolve dependencies (database, auth, etc.)                         ││
-│  │  • Execute dependency functions                                         ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔧 YOUR ENDPOINT FUNCTION                                                   │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │  @app.get("/items/{item_id}")                                          ││
-│  │  async def read_item(item_id: int, query: str = None):                  ││
-│  │      # Your business logic here                                         ││
-│  │      ┌─────────────────────────────────────────────────────────────────┐││
-│  │      │  💾 Database Operations                                         │││
-│  │      │  🤖 ML Model Inference                                          │││
-│  │      │  🔄 Data Processing                                              │││
-│  │      │  🧮 Business Logic                                               │││
-│  │      │  📊 Analytics/Logging                                            │││
-│  │      └─────────────────────────────────────────────────────────────────┘││
-│  │      return {"item_id": item_id, "query": query}                       ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  📤 RESPONSE GENERATION                                                      │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │  🔄 DATA CONVERSION                                                     ││
-│  │  • Python dict/list → JSON                                             ││
-│  │  • Pydantic model → JSON                                               ││
-│  │  • Custom serialization                                                 ││
-│  │                                                                         ││
-│  │  🏷️  RESPONSE HEADERS                                                   ││
-│  │  • Content-Type: application/json                                       ││
-│  │  • Status Code: 200, 201, 404, etc.                                    ││
-│  │  • Custom headers                                                       ││
-│  │                                                                         ││
-│  │  ✅ RESPONSE MODEL VALIDATION (Optional)                               ││
-│  │  • Validate against response_model                                      ││
-│  │  • Filter output fields                                                 ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔄 ASGI SERVER (Uvicorn)                                                   │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │  • Convert FastAPI response to HTTP format                             ││
-│  │  • Add proper HTTP headers                                             ││
-│  │  • Send response over network                                           ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
-│
-▼
+   ┌───────────────────────────────────────────────────────────────────────────┐
+   │  HTTP Request                                                             │
+   │  • Method: GET/POST/PUT/DELETE                                            │
+   │  • URL: http://127.0.0.1:8000/items/5?query=abc                           │
+   │  • Headers: Content-Type, Authorization, etc.                             │
+   │  • Body: JSON data (for POST/PUT)                                         │
+   └───────────────────────────────────────────────────────────────────────────┘
+   │
+   ▼
+┌────────────────────────────────────────────────────────────────────────────────┐
+│   ASGI SERVER (Uvicorn)                                                        │
+│  ┌───────────────────────────────────────────────────────────────────────────┐ │
+│  │  • Receives raw HTTP request                                              │ │
+│  │  • Parses HTTP headers, method, path, body                                │ │
+│  │  • Converts to ASGI scope (Python dictionary)                             │ │
+│  │  • Handles connection management                                          │ │
+│  └───────────────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────┘
+   │
+   ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│   FASTAPI APPLICATION                                                           │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │  ROUTING                                                                   │ │
+│  │  • Match path: /items/{item_id} ↔ /items/5                                 │ │
+│  │  • Match HTTP method: GET                                                  │ │
+│  │  • Find corresponding function                                             │ │
+│  │                                                                            │ │
+│  │  PARAMETER PROCESSING                                                      │ │
+│  │  • Path params: {item_id} → 5 (converted to int)                           │ │
+│  │  • Query params: ?query=abc → query="abc"                                  │ │
+│  │  • Request body: JSON → Pydantic model                                     │ │
+│  │  • Type validation and conversion                                          │ │
+│  │                                                                            │ │
+│  │  DEPENDENCY INJECTION                                                      │ │
+│  │  • Resolve dependencies (database, auth, etc.)                             │ │
+│  │  • Execute dependency functions                                            │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────┘
+   │
+   ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│   YOUR ENDPOINT FUNCTION                                                        │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │  @app.get("/items/{item_id}")                                              │ │
+│  │  async def read_item(item_id: int, query: str = None):                     │ │
+│  │      # Your business logic here                                            │ │
+│  │      ┌─────────────────────────────────────────────────────────────────┐   │ │
+│  │      │  - Database Operations                                          │   │ │
+│  │      │  - ML Model Inference                                           │   │ │
+│  │      │  - Data Processing                                              │   │ │
+│  │      │  - Business Logic                                               │   │ │
+│  │      │  - Analytics/Logging                                            │   │ │
+│  │      └─────────────────────────────────────────────────────────────────┘   │ │
+│  │      return {"item_id": item_id, "query": query}                           │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────┘
+   │
+   ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│   RESPONSE GENERATION                                                           │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │  DATA CONVERSION                                                           │ │
+│  │  • Python dict/list → JSON                                                 │ │
+│  │  • Pydantic model → JSON                                                   │ │
+│  │  • Custom serialization                                                    │ │
+│  │                                                                            │ │
+│  │  RESPONSE HEADERS                                                          │ │
+│  │  • Content-Type: application/json                                          │ │
+│  │  • Status Code: 200, 201, 404, etc.                                        │ │
+│  │  • Custom headers                                                          │ │
+│  │                                                                            │ │
+│  │  RESPONSE MODEL VALIDATION (Optional)                                      │ │
+│  │  • Validate against response_model                                         │ │
+│  │  • Filter output fields                                                    │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────┘
+   │
+   ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│   ASGI SERVER (Uvicorn)                                                         │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │  • Convert FastAPI response to HTTP format                                 │ │
+│  │  • Add proper HTTP headers                                                 │ │
+│  │  • Send response over network                                              │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────┘
+   │
+   ▼
 🌐 CLIENT
-│  ┌─────────────────────────────────────────────────────────────┐
-│  │  HTTP Response                                              │
-│  │  • Status: 200 OK                                          │
-│  │  • Headers: Content-Type: application/json                 │
-│  │  • Body: {"item_id": 5, "query": "abc"}                   │
-│  └─────────────────────────────────────────────────────────────┘
+   ┌───────────────────────────────────────────────────────────────────────────┐
+   │  HTTP Response                                                            │
+   │  • Status: 200 OK                                                         │
+   │  • Headers: Content-Type: application/json                                │
+   │  • Body: {"item_id": 5, "query": "abc"}                                   │
+   └───────────────────────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              PERFORMANCE NOTES                              │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │  ⚡ Async Functions: Non-blocking I/O operations                        ││
-│  │  🧵 Sync Functions: Run in thread pool for CPU-bound tasks              ││
-│  │  🔄 Concurrent Requests: Multiple requests handled simultaneously        ││
-│  │  📊 Auto-validation: Type checking and data validation built-in         ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                               PERFORMANCE NOTES                                 │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │  Async Functions: Non-blocking I/O operations                              │ │
+│  │  Sync Functions: Run in thread pool for CPU-bound tasks                    │ │
+│  │  Concurrent Requests: Multiple requests handled simultaneously             │ │
+│  │  Auto-validation: Type checking and data validation built-in               │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Simplified Block Diagram
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   CLIENT    │───▶│    ASGI     │───▶│   FASTAPI   │───▶│    YOUR     │
-│  (Browser,  │    │   SERVER    │    │ APPLICATION │    │  FUNCTION   │
-│   App, API) │    │ (Uvicorn)   │    │ (Routing &  │    │ (Business   │
-│             │    │             │    │ Validation) │    │   Logic)    │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-       ▲                 ▲                 ▲                 │
-       │                 │                 │                 │
-       │                 │                 ▼                 ▼
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│ HTTP        │◀───│ HTTP        │◀───│ RESPONSE    │◀───│ RETURN      │
-│ RESPONSE    │    │ CONVERSION  │    │ GENERATION  │    │ DATA        │
-│             │    │             │    │             │    │             │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│     CLIENT      │───▶│   ASGI SERVER   │───▶│   FASTAPI APP   │───▶│  YOUR FUNCTION  │
+│   (Browser,     │    │   (Uvicorn)     │    │  (Routing &     │    │   (Business     │
+│    App, API)    │    │                 │    │  Validation)    │    │     Logic)      │
+│                 │    │                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+        ▲                       ▲                       ▲                       │
+        │                       │                       │                       │
+        │                       │                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ HTTP RESPONSE   │◀───│ HTTP CONVERSION │◀───│ RESPONSE        │◀───│ RETURN DATA     │
+│                 │    │                 │    │ GENERATION      │    │                 │
+│                 │    │                 │    │                 │    │                 │
+│                 │    │                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘    └─────────────────┘
+
+REQUEST FLOW:  CLIENT → ASGI → FASTAPI → FUNCTION
+RESPONSE FLOW: CLIENT ← ASGI ← FASTAPI ← FUNCTION
 ```
